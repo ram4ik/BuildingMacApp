@@ -85,14 +85,42 @@ struct ContentView: View {
     @State private var questions = [Question]()
     @State private var number = 0
     
+    var score: Int {
+        var total = 0
+        
+        for i in 0..<number {
+            if questions[i].userAnswer == questions[i].actualAnswer {
+                total += 1
+            }
+        }
+        
+        return total
+    }
+    
     var body: some View {
         ZStack {
             ForEach(0..<questions.count, id: \.self) { index in
                 QuestionRow(question: self.questions[index], position: self.postition(for: index))
                     .offset(x: 0, y: CGFloat(index) * 100 - CGFloat(self.number) * 100)
             }
+            VStack {
+                HStack {
+                    Spacer()
+                    Text("Score: \(score)")
+                        .padding()
+                        .background(Capsule().fill(Color.white.opacity(0.8)))
+                        .animation(nil)
+                }
+                .font(.largeTitle)
+                .foregroundColor(.black)
+                .padding()
+                
+                Spacer()
+            }
+            .padding()
         }
         .frame(width: 1000, height: 600)
+        .background(LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .onAppear(perform: createQuestions)
         .onReceive(NotificationCenter.default.publisher(for: .enterNumber)) { note in
             guard let number = note.object as? Int else { return }
@@ -102,7 +130,7 @@ struct ContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .removeNumber)) { _ in
-            print("Remove")
+            _ = self.questions[self.number].userAnswer.popLast()
         }
         .onReceive(NotificationCenter.default.publisher(for: .submitAnswer)) { _ in
             if self.questions[self.number].userAnswer.isEmpty == false {
