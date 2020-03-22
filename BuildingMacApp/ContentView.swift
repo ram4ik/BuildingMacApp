@@ -8,10 +8,15 @@
 
 import SwiftUI
 
+enum Position {
+    case answered, current, upcoming
+}
+
 struct Question {
     let text: String
     let actualAnswer: String
     var userAnswer = ""
+    var paddingAmount = 0
     
     init() {
         let left = Int.random(in: 1...10)
@@ -19,16 +24,45 @@ struct Question {
         
         text = "\(left) + \(right) = "
         actualAnswer = "\(left + right)"
+        
+        if left < 10 {
+            paddingAmount += 1
+        }
+        
+        if right < 10 {
+            paddingAmount += 1
+        }
     }
 }
 
 struct QuestionRow: View {
     var question: Question
+    var position: Position
+    
+    var positionColor: Color {
+        if position == .answered {
+            if question.actualAnswer == question.userAnswer {
+                return Color.green.opacity(0.8)
+            } else {
+                return Color.red.opacity(0.8)
+            }
+        } else if position == .upcoming {
+            return Color.black.opacity(0.5)
+        } else {
+            return .blue
+        }
+    }
     
     var body: some View {
         HStack {
-            Text(question.text)
-                .padding([.top, .bottom, .leading])
+            HStack(spacing: 0) {
+                if question.paddingAmount > 0 {
+                    Text(String(repeating: " ", count: question.paddingAmount))
+                }
+                
+                Text(question.text)
+            }
+            .padding([.top, .bottom, .leading])
             
             ZStack {
                 Text(" ")
@@ -36,7 +70,7 @@ struct QuestionRow: View {
                     .frame(width: 150)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.blue)
+                            .fill(positionColor)
                     )
                 
                 Text(question.userAnswer)
@@ -49,31 +83,49 @@ struct QuestionRow: View {
 
 struct ContentView: View {
     @State private var questions = [Question]()
+    @State private var number = 0
     
     var body: some View {
         ZStack {
             ForEach(0..<questions.count, id: \.self) { index in
-                QuestionRow(question: self.questions[index])
-                    .offset(x: 0, y: CGFloat(index) * 100)
+                QuestionRow(question: self.questions[index], position: self.postition(for: index))
+                    .offset(x: 0, y: CGFloat(index) * 100 - CGFloat(self.number) * 100)
             }
         }
         .frame(width: 1000, height: 600)
         .onAppear(perform: createQuestions)
         .onReceive(NotificationCenter.default.publisher(for: .enterNumber)) { note in
             guard let number = note.object as? Int else { return }
-            print(number)
+            
+            if self.questions[self.number].userAnswer.count < 3 {
+                self.questions[self.number].userAnswer += String(number)
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .removeNumber)) { _ in
             print("Remove")
         }
         .onReceive(NotificationCenter.default.publisher(for: .submitAnswer)) { _ in
-            print("Submit")
+            if self.questions[self.number].userAnswer.isEmpty == false {
+                withAnimation {
+                    self.number += 1
+                }
+            }
         }
     }
     
     func createQuestions() {
         for _ in 1...50 {
             questions.append(Question())
+        }
+    }
+    
+    func postition(for index: Int) -> Position {
+        if index < number {
+            return .answered
+        } else if index == number {
+            return .current
+        } else {
+            return .upcoming
         }
     }
 }
