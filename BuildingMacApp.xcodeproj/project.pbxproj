@@ -12,6 +12,7 @@
 		1D3FD9E22427DDCA0082F52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D3FD9E12427DDCA0082F52E /* Assets.xcassets */; };
 		1D3FD9E52427DDCA0082F52E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D3FD9E42427DDCA0082F52E /* Preview Assets.xcassets */; };
 		1D3FD9E82427DDCA0082F52E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D3FD9E62427DDCA0082F52E /* Main.storyboard */; };
+		1D3FD9F12427EC1B0082F52E /* TypingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3FD9F02427EC1B0082F52E /* TypingWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		1D3FD9E72427DDCA0082F52E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1D3FD9E92427DDCA0082F52E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1D3FD9EA2427DDCA0082F52E /* BuildingMacApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BuildingMacApp.entitlements; sourceTree = "<group>"; };
+		1D3FD9F02427EC1B0082F52E /* TypingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				1D3FD9E92427DDCA0082F52E /* Info.plist */,
 				1D3FD9EA2427DDCA0082F52E /* BuildingMacApp.entitlements */,
 				1D3FD9E32427DDCA0082F52E /* Preview Content */,
+				1D3FD9F02427EC1B0082F52E /* TypingWindow.swift */,
 			);
 			path = BuildingMacApp;
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D3FD9F12427EC1B0082F52E /* TypingWindow.swift in Sources */,
 				1D3FD9E02427DDC70082F52E /* ContentView.swift in Sources */,
 				1D3FD9DE2427DDC70082F52E /* AppDelegate.swift in Sources */,
 			);

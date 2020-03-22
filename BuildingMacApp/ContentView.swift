@@ -27,8 +27,20 @@ struct QuestionRow: View {
     
     var body: some View {
         HStack {
-            Text("5 + 5 = ")
+            Text(question.text)
                 .padding([.top, .bottom, .leading])
+            
+            ZStack {
+                Text(" ")
+                    .padding()
+                    .frame(width: 150)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.blue)
+                    )
+                
+                Text(question.userAnswer)
+            }
         }
         .font(.system(size: 48, weight: .regular, design: .monospaced))
         .foregroundColor(.white)
@@ -46,7 +58,17 @@ struct ContentView: View {
             }
         }
         .frame(width: 1000, height: 600)
-    .onAppear(perform: createQuestions)
+        .onAppear(perform: createQuestions)
+        .onReceive(NotificationCenter.default.publisher(for: .enterNumber)) { note in
+            guard let number = note.object as? Int else { return }
+            print(number)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .removeNumber)) { _ in
+            print("Remove")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .submitAnswer)) { _ in
+            print("Submit")
+        }
     }
     
     func createQuestions() {
